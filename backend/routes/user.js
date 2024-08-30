@@ -1,6 +1,6 @@
 const express = require("express");
 const zod = require("zod");
-const { User } = require("../db");
+const { User, Account } = require("../db");
 const jwt = require("jsonwebtoken");
 const { authMiddleware } = require("../middleware");
 
@@ -39,6 +39,12 @@ router.post("/signup", async (req, res) => {
         lastName: req.body.lastName,
     })
     const userId = user._id;
+
+    //Initialize some random balance between 1-10000
+    await Account.create({
+        userId,
+        balance: 1 + Math.random() * 10000
+    })
 
     const token = jwt.sign({
         userId
@@ -133,5 +139,16 @@ router.get("/bulk", async (req, res) => {
         }))
     })
 })
+
+//Get Balance
+router.get("/balance", authMiddleware, async (req, res) => {
+    const account = await Account.findOne({
+        userId: req.userId
+    });
+
+    res.json({
+        balance: account.balance
+    })
+});
 
 module.exports = router;
