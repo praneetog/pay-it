@@ -1,10 +1,10 @@
-const express = require("express");
+const express = require('express');
+const router = express.Router();
 const zod = require("zod");
 const { User, Account } = require("../db");
 const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../config");
 const { authMiddleware } = require("../middleware");
-
-const router = express.Router();
 
 const signupBody = zod.object({
     username: zod.string().email(),
@@ -36,7 +36,7 @@ router.post("/signup", async (req, res) => {
         username: req.body.username,
         password: req.body.password,
         firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        lastName: req.body.lastName
     })
     const userId = user._id;
 
@@ -107,7 +107,7 @@ router.put("/", authMiddleware, async (req, res) => {
         })
     }
 
-		await User.updateOne({ _id: req.userId }, req.body);
+	await User.updateOne(req.body, { _id: req.userId });
 	
     res.json({
         message: "Updated successfully"
