@@ -2,7 +2,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const url = process.env.MONGO_URL;
 
-mongoose.connect(url)
+mongoose.connect("mongodb+srv://praneetog:77818@cluster0.gufva.mongodb.net/pay-it")
 
 const userSchema = new mongoose.Schema({
     username: String,
