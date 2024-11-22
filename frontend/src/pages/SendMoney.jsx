@@ -1,11 +1,13 @@
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 export const SendMoney = () => {
     const [searchParams] = useSearchParams();
     const id = searchParams.get("id");
     const name = searchParams.get("name");
     const token = localStorage.getItem("token");
+    const navigate = useNavigate();
 
   return (
     <div class="flex justify-center h-screen bg-gray-100">
@@ -47,6 +49,7 @@ export const SendMoney = () => {
                 }
                 }).then((res) => {
                   alert('Transfer initiated successfully');
+                  navigate("/dashboard");
                 }).catch((err) => {
                   alert('Transfer failed');
                 });
