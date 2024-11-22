@@ -5,6 +5,7 @@ export const SendMoney = () => {
     const [searchParams] = useSearchParams();
     const id = searchParams.get("id");
     const name = searchParams.get("name");
+    const token = localStorage.getItem("token");
 
   return (
     <div class="flex justify-center h-screen bg-gray-100">
@@ -35,7 +36,21 @@ export const SendMoney = () => {
                   placeholder="Enter amount"
                 />
               </div>
-              <button class="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white">
+              <button onClick={() => {
+                axios.post("http://localhost:3000/api/v1/account/transfer", {
+                  amount: document.getElementById('amount').value,
+                  to: id,
+                },
+                {
+                headers: {
+                  Authorization: "Bearer " + token,
+                }
+                }).then((res) => {
+                  alert('Transfer initiated successfully');
+                }).catch((err) => {
+                  alert('Transfer failed');
+                });
+              }} class="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white">
                 Initiate Transfer
               </button>
             </div>
